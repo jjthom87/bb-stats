@@ -53,7 +53,7 @@ module.exports = (passport, db) => {
   					} else {
               query = "SELECT * FROM users WHERE username='"+username+"'";
               db.query(query, (error,user) => {
-                return done(null, {username: user[0].username})
+                return done(null, {id: user[0].id, username: user[0].username})
               })
   					}
   				});

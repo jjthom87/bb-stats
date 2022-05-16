@@ -32,7 +32,7 @@ $(document).ready(function(){
 					alert("Username has been taken. Please enter another one.")
 				}
 			} else {
-				window.location.href = "/sign-in"
+				window.location.href = "/checklist"
 			}
 		});
 	});
