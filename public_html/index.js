@@ -213,6 +213,7 @@ document.addEventListener('click', async function(e){
       const content = await rawResponse.json();
     })();
   } else if (e.target.className == "show-all-checkbox"){
+    document.querySelector('.search-bb-input').value = "";
     if(e.target.checked){
       const filteredBbs = bbdata.filter(bb => bb['checked'] == true);
       let liString = "";
