@@ -10,6 +10,7 @@ var db = require('./database.js');
 var path = require('path');
 const fs = require("fs");
 const { parse } = require("csv-parse");
+var bcrypt = require('bcrypt-nodejs');
 
 db.connect();
 
@@ -333,6 +334,30 @@ app.post('/api/sign-in', function(req,res,next){
 			return res.status(200).json({success : true, message : 'authentication succeeded', user: user, info: info});
 		});
 		})(req, res, next);
+});
+
+app.post('/api/reset-password', function(req,res){
+	db.query("SELECT * FROM users WHERE username='" + req.body.username + "'", (err, user) => {
+		if(user.length == 0){
+			res.json({success: false, message: 'no user'});
+		} else {
+			var salt = bcrypt.genSaltSync(10);
+			var hashedPassword = bcrypt.hashSync(req.body.password, salt);
+			db.query("UPDATE users SET password='" + hashedPassword + "' WHERE username='"+req.body.username+"'", (error, resetRes) => {
+				if(error){
+					res.json({success: false, message: error})
+				} else {
+					res.json({success: true, response: resetRes})
+				}
+			});
+		}
+	});
+});
+
+app.delete('/api/logout-user', function (req, res) {
+	req.session.destroy(function(out){
+		res.json(out)
+	});
 });
 
 app.listen(8000);

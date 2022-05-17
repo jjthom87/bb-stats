@@ -3,11 +3,14 @@
   <head>
     <meta charset="utf-8">
     <title>Beanie Baby Checklist</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   </head>
   <body>
+    <button style="margin-right: 50px; float: right;" id="logout-button" type="button" class="btn btn-danger">Logout</button>
     <h1>Beanie Baby Checklist</h1>
     <img id="loader-gif" src="/Loading.gif" style="display: none;"/>
-    <input placeholder="Search Beanies" class="search-bb-input" type="text" /> Your Beanies<input type="checkbox" class="show-all-checkbox">
+    <input style="margin-left: 15px;" placeholder="Search Beanies" class="search-bb-input" type="text" /> Your Beanies<input style="position: absolute;margin-left: 2px;margin-top: 7px;" type="checkbox" class="show-all-checkbox">
+    <br><br>
     <ul id="beanie-baby-list"></ul>
   </body>
   <script src="/index.js" type="text/javascript"></script>

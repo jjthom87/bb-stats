@@ -161,24 +161,32 @@ function setListItemName(hangTag, bbName){
   return postNum + " " + bbName;
 }
 
+function formatDataToListItems(data){
+  const beanieList = data.filter((value, index, self) =>
+    index === self.findIndex((t) => (
+      setListItemName(t['Hang Tag'],t['Beanie Baby Name']) == setListItemName(value['Hang Tag'],value['Beanie Baby Name'])
+    ))
+  )
+
+  let totalLiString = "";
+  for(var j = 0; j < beanieList.length; j++){
+    if(beanieList[j]['checked']){
+      totalLiString += `<li style="list-style: none; class='bb-list-item'"><input type='checkbox' checked class='beanie-baby-list-item' data-id='${setListItemName(beanieList[j]['Hang Tag'],beanieList[j]['Beanie Baby Name'])}' /> ${setListItemName(beanieList[j]['Hang Tag'],beanieList[j]['Beanie Baby Name'])}</li>`;
+    } else {
+      totalLiString += `<li style="list-style: none; class='bb-list-item'"><input type='checkbox' class='beanie-baby-list-item' data-id='${setListItemName(beanieList[j]['Hang Tag'],beanieList[j]['Beanie Baby Name'])}' /> ${setListItemName(beanieList[j]['Hang Tag'],beanieList[j]['Beanie Baby Name'])}</li>`;
+    }
+  }
+  return totalLiString;
+}
+
 function getData(){
   document.querySelector('#loader-gif').style.display = "block";
   return new Promise((resolve, reject) => {
     fetch('/api/checked')
       .then(response => response.json())
       .then(response => {
-        const checkedData = response.data;
-        let liString = "";
-        for(var j = 0; j < checkedData.length; j++){
-            const listItemName = setListItemName(checkedData[j]['Hang Tag'], checkedData[j]['Beanie Baby Name'])
-            if(checkedData[j]['checked']){
-              liString += `<li style="list-style: none; class='bb-list-item'"><input type='checkbox' checked class='beanie-baby-list-item' data-id='${listItemName}' /> ${listItemName}</li>`;
-            } else {
-              liString += `<li style="list-style: none; class='bb-list-item'"><input type='checkbox' class='beanie-baby-list-item' data-id='${listItemName}' /> ${listItemName}</li>`;
-            }
-        }
-
-        document.querySelector('#beanie-baby-list').innerHTML = liString;
+        const totalLiString = formatDataToListItems(response.data)
+        document.querySelector('#beanie-baby-list').innerHTML = totalLiString;
         document.querySelector('#loader-gif').style.display = "none";
         resolve(response.data)
       });
@@ -216,13 +224,9 @@ document.addEventListener('click', async function(e){
     document.querySelector('.search-bb-input').value = "";
     if(e.target.checked){
       const filteredBbs = bbdata.filter(bb => bb['checked'] == true);
-      let liString = "";
-      for(var j = 0; j < filteredBbs.length; j++){
-        const listItemName = setListItemName(filteredBbs[j]['Hang Tag'], filteredBbs[j]['Beanie Baby Name'])
-        liString += `<li style="list-style: none; class='bb-list-item'"><input type='checkbox' checked class='beanie-baby-list-item' data-id='${listItemName}' /> ${listItemName}</li>`;
-      }
+      const totalLiString = formatDataToListItems(filteredBbs)
 
-      document.querySelector('#beanie-baby-list').innerHTML = liString;
+      document.querySelector('#beanie-baby-list').innerHTML = totalLiString;
       document.querySelector('#loader-gif').style.display = "none";
     } else {
       getData()
@@ -242,16 +246,21 @@ document.querySelector('.search-bb-input').addEventListener('keydown', function(
     inputValue = e.target.value + e.key;
   }
   const filteredBbs = bbdata.filter(bb => bb['Beanie Baby Name'].toLowerCase().includes(inputValue.toLowerCase()));
-  let liString = "";
-  for(var j = 0; j < filteredBbs.length; j++){
-      const listItemName = setListItemName(filteredBbs[j]['Hang Tag'],filteredBbs[j]['Beanie Baby Name'])
-      if(filteredBbs[j]['checked']){
-        liString += `<li style="list-style: none; class='bb-list-item'"><input type='checkbox' checked class='beanie-baby-list-item' data-id='${listItemName}' /> ${listItemName}</li>`;
-      } else {
-        liString += `<li style="list-style: none; class='bb-list-item'"><input type='checkbox' class='beanie-baby-list-item' data-id='${listItemName}' /> ${listItemName}</li>`;
-      }
-  }
+  const totalLiString = formatDataToListItems(filteredBbs)
 
-  document.querySelector('#beanie-baby-list').innerHTML = liString;
+  document.querySelector('#beanie-baby-list').innerHTML = totalLiString;
   document.querySelector('#loader-gif').style.display = "none";
+});
+
+document.querySelector('#logout-button').addEventListener('click', function(e){
+  e.preventDefault();
+
+  (async () => {
+    const rawResponse = await fetch('/api/logout-user', {
+      method: 'DELETE'
+    });
+    const content = await rawResponse;
+    window.location.href = "/"
+  })();
+
 })

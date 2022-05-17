@@ -15,26 +15,30 @@ $(document).ready(function(){
 	$('#post-form').on('submit', function(e){
 		e.preventDefault();
 
-		var postObj = {
-			username: $('#username-input').val(),
-			password: $('#password-input').val()
-		}
-
-		$.ajax({
-			method: 'POST',
-			url: '/api/sign-up',
-			dataType: 'json',
-			data: JSON.stringify(postObj),
-			contentType: 'application/json'
-		}).then(function(res){
-			if(!res.user){
-				if(res.info.message === "username taken"){
-					alert("Username has been taken. Please enter another one.")
-				}
-			} else {
-				window.location.href = "/checklist"
+		if($('#password-input').val() == $('#confirm-password-input').val()){
+			var postObj = {
+				username: $('#username-input').val(),
+				password: $('#password-input').val()
 			}
-		});
+
+			$.ajax({
+				method: 'POST',
+				url: '/api/sign-up',
+				dataType: 'json',
+				data: JSON.stringify(postObj),
+				contentType: 'application/json'
+			}).then(function(res){
+				if(!res.user){
+					if(res.info.message === "username taken"){
+						alert("Username has been taken. Please enter another one.")
+					}
+				} else {
+					window.location.href = "/checklist"
+				}
+			});
+		} else {
+				alert("Passwords Do Not Match")
+		}
 	});
 
 	$('#sign-in-form').on('submit', function(e){
@@ -63,5 +67,39 @@ $(document).ready(function(){
 			}
 		});
 	});
+
+	$('#reset-password-button').on('click', function(){
+		$('#exampleModal').modal();
+	});
+
+	$('#reset-password-form').on('submit', function(e){
+		e.preventDefault();
+
+		if($('#reset-password-input').val() == $('#reset-confirm-password-input').val()){
+			var postObj = {
+				username: $('#reset-username-input').val(),
+				password: $('#reset-password-input').val()
+			}
+
+			$.ajax({
+				method: 'POST',
+				url: '/api/reset-password',
+				dataType: 'json',
+				data: JSON.stringify(postObj),
+				contentType: 'application/json'
+			}).then(function(res){
+				console.log(res)
+				if(res.success){
+					alert("Password Changed Successfully. Please Sign In with new password.")
+					$('#exampleModal').modal('toggle');
+				}
+			});
+		} else {
+				$('#reset-password-input').val("")
+				$('#reset-confirm-password-input').val("")
+				alert("Passwords Do Not Match")
+		}
+	});
+
 
 });
