@@ -262,5 +262,36 @@ document.querySelector('#logout-button').addEventListener('click', function(e){
     const content = await rawResponse;
     window.location.href = "/"
   })();
+});
 
-})
+$('#contact-me-button').on('click', function(){
+  $('#contactModal').modal();
+});
+
+$('#contact-me-form').on('submit', function(e){
+  e.preventDefault();
+
+  if($('#contact-me-email-input').val() !== "" && $('#contact-me-message-input').val() !== ""){
+    var postObj = {
+      email: $('#contact-me-email-input').val(),
+      message: $('#contact-me-message-input').val()
+    }
+
+    $.ajax({
+      method: 'POST',
+      url: '/api/contact',
+      dataType: 'json',
+      data: JSON.stringify(postObj),
+      contentType: 'application/json'
+    }).then(function(res){
+      if(res.success){
+        alert("Message Successfully Sent!")
+        $('#contactModal').modal('toggle');
+      } else {
+        console.log(res.error)
+      }
+    });
+  } else {
+    alert("Email and Message Field Can Not Be Blank")
+  }
+});

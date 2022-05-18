@@ -88,7 +88,6 @@ $(document).ready(function(){
 				data: JSON.stringify(postObj),
 				contentType: 'application/json'
 			}).then(function(res){
-				console.log(res)
 				if(res.success){
 					alert("Password Changed Successfully. Please Sign In with new password.")
 					$('#exampleModal').modal('toggle');
@@ -101,5 +100,36 @@ $(document).ready(function(){
 		}
 	});
 
+	$('#contact-me-button').on('click', function(){
+		$('#contactModal').modal();
+	});
+
+	$('#contact-me-form').on('submit', function(e){
+		e.preventDefault();
+
+		if($('#contact-me-email-input').val() !== "" && $('#contact-me-message-input').val() !== ""){
+			var postObj = {
+				email: $('#contact-me-email-input').val(),
+				message: $('#contact-me-message-input').val()
+			}
+
+			$.ajax({
+				method: 'POST',
+				url: '/api/contact',
+				dataType: 'json',
+				data: JSON.stringify(postObj),
+				contentType: 'application/json'
+			}).then(function(res){
+				if(res.success){
+					alert("Message Successfully Sent!")
+					$('#contactModal').modal('toggle');
+				} else {
+	        console.log(res.error)
+	      }
+			});
+		} else {
+			alert("Email and Message Field Can Not Be Blank")
+		}
+	});
 
 });

@@ -7,6 +7,7 @@ var cookieParser = require('cookie-parser');
 var passport = require('passport');
 var passportConfig = require('./passport.js')
 var db = require('./database.js');
+var mail = require('./mail.js');
 var path = require('path');
 const fs = require("fs");
 const { parse } = require("csv-parse");
@@ -293,6 +294,10 @@ app.get('/checklist', function(req,res){
 		}
 });
 
+app.get('/redirect-to-app', function(req,res){
+	res.sendFile(path.join(__dirname, './public_html/redirect.html'));
+});
+
 app.get('/api/signed-in', function(req,res){
 	if(req.session.passport != undefined){
 		res.json({success: true, message: 'signed in user', user: req.session.passport.user});
@@ -358,6 +363,15 @@ app.delete('/api/logout-user', function (req, res) {
 	req.session.destroy(function(out){
 		res.json(out)
 	});
+});
+
+app.post('/api/contact', function (req, res) {
+	var html = `<html><body><div><p>Email: ${req.body.email}</p><p>Message: ${req.body.message}</p></div></body></html>`;
+	mail.send(html).then((val) => {
+		res.json({success: true})
+	}).catch((err) => {
+		res.json({success: false, error: err})
+	})
 });
 
 app.listen(8000);

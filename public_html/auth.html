@@ -3,12 +3,12 @@
 <head>
 	<title>Beanie Baby Checklist</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<!-- <link rel="stylesheet" type="text/css" href="./public/css/sign_up.css"> -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 </head>
 <body>
 	<div class="container">
+		<a style="margin-right: 50px;margin-top: 10px;float: right;" class="btn btn-danger" data-toggle="modal" data-target="#contactModal">Contact Me</a>
 		<h1>Beanie Baby Checklist</h1>
 		<h3>If you have an account, please Sign In Here and update your Checklist!</h3>
 		<div class="well">
@@ -19,7 +19,7 @@
 				<input type="password" id="sign-in-password-input"/><br><br>
 				<input class="btn btn-danger" type="submit" value="Sign In">
 			</form>
-			<button style="margin-left: 75px;margin-top: -56px;" class="btn btn-danger" id="reset-password-button">Reset Password</button>
+			<a style="margin-left: 75px;margin-top: -56px;" class="btn btn-danger" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">Reset Password</a>
 		</div>
 		<h3>If you don't have an account, please Sign Up here and get started on your Checklist!</h3>
 		<div class="well">
@@ -52,6 +52,31 @@
 							<label>Confirm Password</label><br>
 							<input type="password" id="reset-confirm-password-input"/><br></br>
 							<input class="btn btn-danger" type="submit" value="Reset Password">
+						</form>
+					</div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		<!-- Contact Me Modal -->
+		<div class="modal fade" id="contactModal" tabindex="-1" role="dialog" aria-labelledby="contactModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="contactModalLabel">Contact Me</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+						<form id="contact-me-form">
+							<label>Email</label><br>
+							<input type="text" id="contact-me-email-input"/><br>
+							<label>Message</label><br>
+							<textarea id="contact-me-message-input"></textarea><br></br>
+							<input class="btn btn-danger" type="submit">
 						</form>
 					</div>
 		      <div class="modal-footer">
